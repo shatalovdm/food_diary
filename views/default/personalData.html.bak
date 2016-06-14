@@ -1,0 +1,2 @@
+{{extend 'plugin_layouts/layouts/Uncomplicated.html'}}
+{{=form}}

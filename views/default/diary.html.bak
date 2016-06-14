@@ -1,0 +1,246 @@
+{{extend 'layout.html'}}
+{{extend 'plugin_layouts/layouts/Uncomplicated.html'}}
+
+<style type="text/css">
+#date {
+    position: absolute;
+    top: 23em;
+    left: 20%;
+    width:45em;
+    height:5em;
+    text-align: center;
+    margin-top: -9em; /*set to a negative number 1/2 of your height*/
+    margin-left: -15em; /*set to a negative number 1/2 of your width*/
+    background-color: #A3CFD9;
+}
+
+
+#table {
+    position: absolute;
+    top: 32em;
+    left: 20%;
+    padding: 1em 3em 3em 3em;
+    width:60em;
+    margin-top: -9em; /*set to a negative number 1/2 of your height*/
+    margin-left: -15em; /*set to a negative number 1/2 of your width*/
+    background-color: #A3CFD9;
+}
+table {
+    width: 100%;
+}
+tr {
+    text-align: left;
+}
+
+#summary {
+    position: fixed;
+    top: 23em;
+    left: 82em;
+    padding: 1em 1em;
+    width:20em;
+    height:20em;
+    margin-top: auto;
+    margin-left: -15em;
+    background-color: #fff2e6;
+}
+
+</style>
+<div id="date">
+    {{from datetime import date}}
+    <form>
+         <h3>
+         Your food diary for:
+        <input class="date" name="current_date" id = "current_date" value="{{=diary_date}}" style="width:7em"/>&nbsp;
+        <button type="submit" style="background-color: #DA2128; color:#ffffff"/>Look it up</h3>
+    </form>
+</div>
+
+<script>
+    jQuery('#current_date').submit((function(){
+       jQuery.get('{{=URL('default', 'diary')}}', {current_date:jQuery('#current_date').val()}).done(data){
+            jQuery('#table').html(data);
+        });
+    });
+</script>
+
+<div id="table">
+    <table>
+        <tr><td><table style="table-layout:fixed;">
+            <col style="width:10%" span="2" />
+            <tr><td><h3>Breakfast </h3></td><td><form action="{{=URL('default','search', args='x')}}" ><button type="submit" name="submit" value="breakfast" style="background-color: #DA2128; color:#ffffff"/>Add a food item</button></form></td></tr>
+            </table></td></tr>
+        {{if result_breakfast:}}
+        <tr><td>
+            <table class = "table"  style="table-layout:fixed; ">
+                <col  span="6" />
+                <tr>
+                    <th style="width:15em;">
+                    </th>
+                    <th>Calories</th>
+                    <th>Carbs</th>
+                    <th>Fat</th>
+                    <th>Protein</th>
+                    <th>
+                    </th>
+                </tr>
+                {{for item in result_breakfast:}}
+                <tr>
+                    <td style="width:15em;">{{=item.food_item}}</td>
+                    <td>{{=item.calories}}</td>
+                    <td>{{=item.carbs}}</td>
+                    <td>{{=item.fat}}</td>
+                    <td>{{=item.protein}}</td>
+                    <td><form><button type="submit" name="delete" value="{{=item.id}}" style="background-color: #DA2128; color:#ffffff"/>Delete</button></form></td>
+                </tr>
+                {{pass}}
+            </table>
+        </td></tr>
+        {{pass}}
+    <tr><td><table style="table-layout:fixed">
+        <col style="width:10%" span="2" />
+            <tr><td><h3>Lunch </h3></td><td><form action="{{=URL('default','search', args='x')}}" ><button type="submit" name="submit" value="lunch" style="background-color: #DA2128; color:#ffffff"/>Add a food item</button></form></td></tr>
+            </table></td></tr>
+        {{if result_lunch:}}
+        <tr><td>
+            <table class = "table"  style="table-layout:fixed">
+                <col span="6" />
+                <tr>
+                    <th style="width:15em;">
+                    </th>
+                    <th>Calories</th>
+                    <th>Carbs</th>
+                    <th>Fat</th>
+                    <th>Protein</th>
+                    <th>
+                    </th>
+                </tr>
+                {{for item in result_lunch:}}
+                <tr>
+                    <td style="width:15em;">{{=item.food_item}}</td>
+                    <td>{{=item.calories}}</td>
+                    <td>{{=item.carbs}}</td>
+                    <td>{{=item.fat}}</td>
+                    <td>{{=item.protein}}</td>
+                    <td><form><button type="submit" name="delete" value="{{=item.id}} "style="background-color: #DA2128; color:#ffffff"/>Delete</button></form></td>
+                </tr>
+                {{pass}}
+            </table>
+        </td></tr>
+        {{pass}}
+    <tr><td><table style="table-layout:fixed">
+        <col style="width:10%" span="2" />
+            <tr><td><h3>Dinner </h3></td><td><form action="{{=URL('default','search', args='x')}}" ><button type="submit" name="submit" value="dinner" style="background-color: #DA2128; color:#ffffff"/>Add a food item</button></form></td></tr>
+            </table></td></tr>
+        {{if result_dinner:}}
+        <tr><td>
+            <table class = "table"  style="table-layout:fixed">
+                <col span="6" />
+                <tr>
+                    <th style="width:15em;">
+                    </th>
+                    <th>Calories</th>
+                    <th>Carbs</th>
+                    <th>Fat</th>
+                    <th>Protein</th>
+                    <th>
+                    </th>
+                </tr>
+                {{for item in result_dinner:}}
+                <tr>
+                    <td style="width:15em;">{{=item.food_item}}</td>
+                    <td>{{=item.calories}}</td>
+                    <td>{{=item.carbs}}</td>
+                    <td>{{=item.fat}}</td>
+                    <td>{{=item.protein}}</td>
+                    <td><form><button type="submit" name="delete" value="{{=item.id}}" style="background-color: #DA2128; color:#ffffff"/>Delete</button></form></td>
+                </tr>
+                {{pass}}
+            </table>
+        </td></tr>
+        {{pass}}
+    <tr><td><table style="table-layout:fixed">
+        <col style="width:10%" span="2" />
+            <tr><td><h3>Snack </h3></td><td><form action="{{=URL('default','search', args='x')}}" ><button type="submit" name="submit" value="snack" style="background-color: #DA2128; color:#ffffff"/>Add a food item</button></form></td></tr>
+            </table></td></tr>
+        {{if result_snack:}}
+        <tr><td>
+            <table class = "table"  style="table-layout:fixed">
+                <col span="6" />
+                <tr>
+                    <th style="width:15em;">
+                    </th>
+                    <th>Calories</th>
+                    <th>Carbs</th>
+                    <th>Fat</th>
+                    <th>Protein</th>
+                    <th>
+                    </th>
+                </tr>
+                {{for item in result_snack:}}
+                <tr>
+                    <td style="width:15em;">{{=item.food_item}}</td>
+                    <td>{{=item.calories}}</td>
+                    <td>{{=item.carbs}}</td>
+                    <td>{{=item.fat}}</td>
+                    <td>{{=item.protein}}</td>
+                    <td><form><button type="submit" name="delete" value="{{=item.id}}" style="background-color: #DA2128; color:#ffffff"/>Delete</button></form></td>
+                </tr>
+                {{pass}}
+            </table>
+        </td></tr>
+        {{pass}}
+    </table>
+</div>
+<div id="summary">
+    <h3 style="text-align:center">
+        Daily performance
+    </h3>
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>Totals</th>
+            <th>Goal</th>
+            <th>Remaining</th>
+        </tr>
+        <tr>
+            <td>Calories</td>
+            <td>{{=calories_sum}}</td>
+            <td>{{=goals.projected_calories}}</td>
+            {{if (goals.projected_calories - calories_sum) >= 0:}}
+            <td style="text-align:center"><b><font color="blue">{{=(goals.projected_calories - calories_sum)}}</font></b></td>
+            {{else:}}
+            <td style="text-align:center"><b><font color="red">{{=(goals.projected_calories - calories_sum)}}</font></b></td>
+            {{pass}}
+        </tr>
+        <tr>
+            <td>Carbs</td>
+            <td>{{=carbs_sum}}</td>
+            <td>{{=goals.carbs}}</td>
+            {{if (goals.carbs - carbs_sum) >= 0:}}
+            <td style="text-align:center"><b><font color="blue">{{=(goals.carbs - carbs_sum)}}</font></b></td>
+            {{else:}}
+            <td style="text-align:center"><b><font color="red">{{=(goals.carbs - carbs_sum)}}</font></b></td>
+            {{pass}}
+        </tr>
+        <tr>
+            <td>Fat</td>
+            <td>{{=fat_sum}}</td>
+            <td>{{=goals.fat}}</td>
+            {{if (goals.fat - fat_sum) >= 0:}}
+            <td style="text-align:center"><b><font color="blue">{{=(goals.fat - fat_sum)}}</font></b></td>
+            {{else:}}
+            <td style="text-align:center"><b><font color="red">{{=(goals.fat - fat_sum)}}</font></b></td>
+            {{pass}}
+        </tr>
+        <tr>
+            <td>Protein</td>
+            <td>{{=protein_sum}}</td>
+            <td>{{=goals.protein}}</td>
+            {{if (goals.protein - protein_sum) >= 0:}}
+            <td style="text-align:center"><b><font color="blue">{{=(goals.protein - protein_sum)}}</font></b></td>
+            {{else:}}
+            <td style="text-align:center"><b><font color="red">{{=(goals.protein - protein_sum)}}</font></b></td>
+            {{pass}}
+        </tr>
+    </table>
+</div>

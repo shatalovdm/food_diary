@@ -1,0 +1,30 @@
+<div id="table">
+    <table class="table">
+        <tr><td><h3>{{=cat}}</h3></td>
+    </tr>
+        <tr><td><h3>Lunch</h3></td>
+    </tr>
+        <tr><td><h3>Dinner</h3></td>
+    </tr>
+    <tr><td><h3>Snack</h3></td>
+    </tr>
+    </table>
+</div>
+<style>
+#table {
+    position: absolute;
+    top: 17em;
+    left: 20%;
+    padding-left: 3em;
+    width:80em;
+    height:25em;
+    margin-top: -9em; /*set to a negative number 1/2 of your height*/
+    margin-left: -15em; /*set to a negative number 1/2 of your width*/
+    border: 1px solid #ccc;
+    background-color: #f3f3f3;
+}
+table {
+    width: 95%;
+}
+
+</style>

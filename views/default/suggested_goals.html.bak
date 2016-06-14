@@ -1,0 +1,51 @@
+{{extend 'plugin_layouts/layouts/Uncomplicated.html'}}
+
+<style>
+#info {
+    position: absolute;
+    top: 29em;
+    left: 27em;
+    padding: 1em 3em 3em 3em;
+    width:38em;
+    height: 15em;
+    margin-top: -9em; /*set to a negative number 1/2 of your height*/
+    margin-left: -15em; /*set to a negative number 1/2 of your width*/
+    background-color: #A3CFD9;
+}
+td {
+    text-align: center;
+}
+#button {
+    position: absolute;
+    top: 38em;
+    left: 27em;
+}
+</style>
+
+
+<h2>Your Suggested Nutrition Goals</h2>
+<h4>Congratulations! Your personolized diet profile is now complete.<br>Based on your answers, here are your suggested nutrition goals.</h4>
+<div id = "info">
+    
+<table class="table">
+ <tr>
+   <th>Net Calories / Day</th>
+   <td>{{=row.projected_calories}}</td>
+  </tr>
+  <tr>
+    <th>Fat / Day</th>
+    <td>{{=row.fat}}</td> 
+  </tr>
+  <tr>
+    <th>Carbs / Day</th>
+    <td>{{=row.carbs}}</td> 
+  </tr>
+  <tr>
+    <th>Protein / Day</th>
+    <td>{{=row.protein}}</td> 
+  </tr>
+</table>
+</div>
+<div id="button">
+    <form action="{{=URL('default','diary')}}"><button type="submit" name="go" style="background-color: #DA2128; color:#ffffff; "/>Start!</button></form>
+</div>

@@ -1,0 +1,146 @@
+{{extend 'plugin_layouts/layouts/Uncomplicated.html'}}
+
+<style>
+#suggestions { position: relative; }
+.suggestions { background: white; }
+.suggestions DIV { padding: 2px 4px 2px 4px; }
+</style>
+<style type="text/css">
+#result {
+    position: absolute;
+    top: 50%;
+    left: 80%;
+    width:30em;
+    height:30em;
+    text-align: center;
+    margin-top: -9em; /*set to a negative number 1/2 of your height*/
+    margin-left: -15em; /*set to a negative number 1/2 of your width*/
+    background-color: #A3CFD9;
+}
+table {
+    width: 95%;
+    left: 10%;
+}
+td {
+    text-align: left;
+}
+#search {
+    position: absolute;
+    left: 5em;
+}
+
+#newitem {
+    position: absolute;
+    top: 42em;
+    left: 20em;
+    width:30em;
+    height:10em;
+    text-align: center;
+    padding: 1em 3em 1em 3em;
+    margin-top: -9em; /*set to a negative number 1/2 of your height*/
+    margin-left: -15em; /*set to a negative number 1/2 of your width*/
+    background-color: #fff2e6;
+}
+</style>
+
+<div id="search">
+    <form>
+
+    <h3>
+        Search for the food item:
+    <br />
+    </h3><h4>
+    {{=form}}<br />
+    <div style="position: relative; width: 400px; height: 200px; overflow: scroll;" id="suggestions"
+      class="suggestions" ></div>
+     </h4>
+</form>
+</div>
+
+{{ if found != None:}}
+<div id="result"> <h4>{{=found.name.replace('.', ' ')}}</h4>
+<table class="table" cellspacing="50">
+  <tr>
+    <td><b>Calories</b></td>
+    <td>{{=found.calories}}</td>
+    <td><b>Sodium</b></td>
+    <td>{{=found.sodium}}</td>
+  </tr>
+  <tr>
+    <td><b>Total fat</b></td>
+    <td>{{=found.total_fat}}</td>
+    <td><b>Potassium</b></td>
+    <td>{{=found.potassium}}</td>
+  </tr>
+  <tr>
+    <td>Saturated fat</td>
+    <td>{{=found.saturated}}</td>
+    <td><b>Carbs</b></td>
+    <td>{{=found.carbs}}</td>
+  </tr>
+  <tr>
+    <td>Polyunsaturated fat</td>
+    <td>{{=found.polyunsaturated}}</td>
+    <td><b>Dietary fiber</b></td>
+    <td>{{=found.fiber}}</td>
+  </tr>
+  <tr>
+    <td>Monounsaturated fat</td>
+    <td>{{=found.monounsaturated}}</td>
+    <td><b>Sugars</b></td>
+    {{if found.sugar:}}
+    <td>{{=found.sugar}}</td>
+    {{else:}}
+    <td>No data</td>
+    {{pass}}
+  </tr>
+  <tr>
+    <td><b>Cholesterol</b></td>
+    <td>{{=found.cholesterol}}</td>
+    <td><b>Protein</b></td>
+    <td>{{=found.protein}}</td>
+  </tr>
+</table>
+{{if session.submit:}}
+<form>
+    <p>
+   Quantity: <input value = "1" style = "width: 50px" id="quantity" name="quantity" autocomplete="off" type="number" required/> of
+   <select name = "weight">
+      {{if found.weight1:}}
+      <option value="{{=found.weight1}}">{{=found.desc_weight1}}</option>
+      {{pass}}
+      {{if found.weight2:}}
+      <option value="{{=found.weight2}}">{{=found.desc_weight2}}</option>
+      {{pass}}
+      <option value="1">100 g</option>
+    </select>
+    </p>
+    <p>
+        <input type="submit" name = "add" value="Add to my diary" style="background-color: #DA2128; color:#ffffff"/>
+    </p>
+</form>
+{{pass}}
+</div>
+{{pass}}
+
+<div id="newitem">
+    <h4>
+        Could not find some food item? No worries! You can add it into your database!
+    </h4>
+    <h4>
+        <form>
+        <button type ="sumbit" name="new_item" value="add" style="height:40px; background-color: #DA2128; color:#ffffff"/> Add
+    </form>
+    </h4>
+    
+</div>
+<script>
+jQuery("#name").keyup(function(){
+    function show() {
+    var m = document.getElementById('suggestions');
+    m.style.border = "solid 1px #55A6C8";
+    ajax('{{=URL('default', 'search_selector')}}', ['name'], 'suggestions')
+    }
+    setTimeout(show, 2000)
+});
+</script>

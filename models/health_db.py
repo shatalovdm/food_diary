@@ -1,0 +1,90 @@
+# -*- coding: utf-8 -*-
+
+from datetime import date
+
+def calculate_age(born):
+    today = date.today()
+    return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+def fatformula(calories):
+    return round((calories*0.30)/9)
+
+def carbsformula(calories):
+    return round((calories*0.55)/4)
+
+
+db.define_table('details',
+          Field('current_weight','double',requires=IS_NOT_EMPTY()),
+          Field('height', 'double'),
+          Field('gender'),
+          Field('date_of_birth','datetime'),
+          Field('your_activity_level','string'),
+          Field('age',compute = lambda r: calculate_age (r['date_of_birth'])),
+          Field('diet_goal','text'),
+          Field('goal_weight', 'double'),
+          Field('created_by','reference auth_user',default = auth.user_id, readable = False, writable = False))
+
+db.define_table('projected',
+                Field('projected_calories', 'integer'),
+                Field('fat', 'integer', compute = lambda r: fatformula (r['projected_calories'])),
+                Field('protein','integer'),
+                Field('carbs', 'integer', compute = lambda r: carbsformula (r['projected_calories'])),
+                Field('created_by','reference auth_user',default = auth.user_id, readable = False, writable = False))
+
+
+db.details.current_weight.widget = lambda f,v: SQLFORM.widgets.string.widget(f, v,
+    _placeholder='lbs')
+db.details.height.widget = lambda f,v: SQLFORM.widgets.string.widget(f, v,
+    _placeholder=' ft')
+db.details.gender.requires = IS_IN_SET(['Female','Male'])
+def horizontal_checkbox(f,v):
+    return SQLFORM.widgets.radio.widget(f,v,cols=3)
+db.details.gender.widget = horizontal_checkbox
+
+db.details.diet_goal.requires = IS_IN_SET(['Maintain current weight', 'Loose weight', 'Gain weight'],zero=T('Choose one'),
+         error_message='must be a or b or c')
+db.details.goal_weight.widget = lambda f,v: SQLFORM.widgets.string.widget(f, v,
+    _placeholder='lbs')
+
+
+db.details.your_activity_level.requires = IS_IN_SET(['Sedentary','Low active','Active','Very active'])
+def horizontal_checkbox(f,v):
+    return SQLFORM.widgets.radio.widget(f,v,cols=4)
+db.details.your_activity_level.widget = horizontal_checkbox
+
+
+db.define_table('food_data',
+                Field('name', requires=IS_NOT_EMPTY()),
+                Field('calories', 'double', requires=IS_NOT_EMPTY()),
+                Field('protein', 'double', requires=IS_NOT_EMPTY()),
+                Field('total_fat', 'double', label='Total fat', requires=IS_NOT_EMPTY()),
+                Field('carbs', 'double', requires=IS_NOT_EMPTY()),
+                Field('fiber', 'double'),
+                Field('sugar', 'double'),
+                Field('calcium', 'double'),
+                Field('iron', 'double'),
+                Field('potassium', 'double'),
+                Field('sodium', 'double'),
+                Field('zinc', 'double'),
+                Field('vit_c', 'double', label='Vitamin C'),
+                Field('vit_b12', 'double', label='Vitamin B12'),
+                Field('vit_a', 'double', label='Vitamin A'),
+                Field('vit_d', 'double', label='Vitamin D'),
+                Field('saturated', 'double'),
+                Field('monounsaturated', 'double'),
+                Field('polyunsaturated', 'double'),
+                Field('cholesterol', 'double'),
+                Field('weight1', 'double'),
+                Field('desc_weight1'),
+                Field('weight2'),
+                Field('desc_weight2'))
+
+db.define_table('diary',
+                Field('meal'),
+                Field('today', 'date'),
+                Field('food_item'),
+                Field('calories', 'integer'),
+                Field('carbs', 'integer'),
+                Field('fat', 'integer'),
+                Field('protein', 'integer'),
+                Field('created_by', 'reference auth_user', default=auth.user_id, readable=False, writable=False))
